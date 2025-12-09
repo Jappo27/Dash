@@ -46,58 +46,6 @@ function App() {
   const [Budget, setBudget] = useState(null);
   const [dates, setDates] = useState(null);
 
-  useEffect(() => {
-    fetch('http://localhost:5000/models')
-      .then(res => res.json())
-      .then(AIs => {
-        setAIs(AIs);
-        console.log(AIs)
-        setSelectedAI(AIs[0])
-      })
-      .catch(err => {
-        console.error('Error fetching models:', err);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch('http://localhost:5000/tables')
-      .then(res => res.json())
-      .then(tables => {
-        setTable(tables);
-        console.log(tables)
-        setSelectedTable(tables[0])
-      })
-      .catch(err => {
-        console.error('Error fetching Tables:', err);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch(`http://localhost:5000/data?model=${selectedAI.name}`).then(
-      res => res.json()
-    ).then(
-      data => {
-        setData(data[selectedTable.name])
-      }).catch(err => {
-        console.error('Error fetching Data:', err);
-      });
-   //https://stackoverflow.com/questions/45992682/calling-functions-after-state-change-occurs-in-reactjs Aishwarya Harpale
-  }, [selectedAI, selectedTable])
-
-  useEffect(() => {
-    fetch(`http://localhost:5000/processData?model=${selectedAI.name}&dates=${dates}`).then(
-      res => res.json()
-    ).then(
-      processData => {
-        console.log(dates)
-        console.log(processData)
-        setProcessData(processData)
-      }).catch(err => {
-        console.error('Error fetching Processing Data:', err);
-      });
-   //https://st, daackoverflow.com/questions/45992682/calling-functions-after-state-change-occurs-in-reactjs Aishwarya Harpale
-  }, [selectedAI, dates])
-
   return (
     <div className = "Website">
       <main>

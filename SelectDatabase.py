@@ -4,7 +4,7 @@ import sqlite3
 class select():
     
     def __init__(self, model_name):
-        self.connection = sqlite3.connect(os.path.abspath('C:/Users/jappo/OneDrive/Desktop/AI-DashBoard/mydata.db'))
+        self.connection = sqlite3.connect(os.path.abspath('mydata.db'))
         self.cursor = self.connection.cursor()
         self.model_name = model_name
         self.model_id = None
