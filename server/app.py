@@ -16,7 +16,7 @@ CORS(app)
 def home():
     return send_from_directory(app.static_folder, "index.html")
 
-@app.route("/models")
+@app.route("/api/models")
 def models():
     try:
         modelname = request.args.get('model', 'gemma3:1b')  # fallback to default if not provided
@@ -34,7 +34,7 @@ def models():
     except Exception as e:
         return jsonify({})
     
-@app.route("/tables")
+@app.route("/api/tables")
 def tables():
     try:
         modelname = request.args.get('model', 'base')  # fallback to default if not provided
@@ -54,7 +54,7 @@ def tables():
     except Exception as e:
         return jsonify({})
 
-@app.route("/processData")
+@app.route("/api/processData")
 def processData():
     try:
         modelname = request.args.get('model', 'gemma3:1b')  # fallback to default if not provided
@@ -137,7 +137,7 @@ def processData():
     except Exception as e:
         return jsonify({})
     
-@app.route("/data")
+@app.route("/api/data")
 def data():
     try:
         modelname = request.args.get('model', 'gemma3:1b')  # fallback to default if not provided
