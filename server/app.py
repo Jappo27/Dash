@@ -30,7 +30,7 @@ def models():
             returnList.append({"name":model})
 
         query.close()
-        return jsonify(returnList)
+        return returnList
     except Exception as e:
         return jsonify({})
     
@@ -133,7 +133,7 @@ def processData():
                         pData[i].append(row[i])
 
                 return pData
-        return jsonify(pData)
+        return pData
     except Exception as e:
         return jsonify({})
     
@@ -161,7 +161,7 @@ def data():
             returnJson[table] = query.getAllValues()[0]
 
         query.close()
-        return jsonify(returnJson)
+        return returnJson
 
 
     except Exception as e:

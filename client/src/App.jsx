@@ -50,7 +50,7 @@ function App() {
   console.log(apiUrl)
 
   useEffect(() => {
-    fetch(`http://localhost:5000/models`)
+    fetch(`${apiUrl}/models`)
       .then(res => res.json())
       .then(AIs => {
         setAIs(AIs);
