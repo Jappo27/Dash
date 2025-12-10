@@ -50,20 +50,15 @@ function App() {
   console.log(apiUrl)
 
   useEffect(() => {
-    console.log("useEffect ran, apiUrl:", apiUrl);
-
     fetch(`${apiUrl}/models`)
-      .then(res => {
-        console.log("Got response:", res);
-        return res.json();
-      })
+      .then(res => res.json())
       .then(AIs => {
-        console.log("Parsed JSON:", AIs);
         setAIs(AIs);
-        setSelectedAI(AIs[0]);
+        console.log(AIs)
+        setSelectedAI(AIs[0])
       })
       .catch(err => {
-        console.error("Error fetching models:", err);
+        console.error('Error fetching models:', err);
       });
   }, []);
 

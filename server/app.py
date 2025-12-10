@@ -32,6 +32,7 @@ def models():
         query.close()
         return returnList
     except Exception as e:
+        print(returnList)
         return jsonify({})
     
 @app.route("/api/tables")
