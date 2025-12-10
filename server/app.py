@@ -10,8 +10,7 @@ app = Flask(
     static_folder=os.path.join(os.path.dirname(__file__), "../client/dist"),
     static_url_path="/"
 )
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
-
+CORS(app)
 
 @app.route("/")
 def home():
