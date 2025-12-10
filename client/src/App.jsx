@@ -54,7 +54,9 @@ function App() {
       .then(res => res.json())
       .then(AIs => {
         setAIs(AIs);
+        console.log("None")
         console.log(AIs)
+        console.log("None")
         setSelectedAI(AIs[0])
       })
       .catch(err => {

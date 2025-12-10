@@ -29,9 +29,8 @@ def models():
         for model in models:
             returnList.append({"name":model})
 
-        print(returnList)
         query.close()
-        return jsonify(returnList)
+        return returnList
     except Exception as e:
         return jsonify({})
     
@@ -134,7 +133,7 @@ def processData():
                         pData[i].append(row[i])
 
                 return pData
-        return jsonify(pData)
+        return pData
     except Exception as e:
         return jsonify({})
     
