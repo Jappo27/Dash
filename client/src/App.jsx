@@ -37,12 +37,12 @@ import { Dropdown } from 'primereact/dropdown';
 import './App.css';
          
 function App() {
-  const [AIs, setAIs] = useState([]);
-  const [table, setTable] = useState([]);
   const [selectedAI, setSelectedAI] = useState("gemma3:1b");
   const [selectedTable, setSelectedTable] = useState("base");
-  const [data, setData] = useState()
   const [processData, setProcessData] = useState("process")
+  const [AIs, setAIs] = useState([]);
+  const [table, setTable] = useState([]);
+  const [data, setData] = useState()
   const [Budget, setBudget] = useState(null);
   const [dates, setDates] = useState(null);
 
@@ -50,17 +50,20 @@ function App() {
   console.log(apiUrl)
 
   useEffect(() => {
+    console.log("useEffect ran, apiUrl:", apiUrl);
+
     fetch(`${apiUrl}/models`)
-      .then(res => res.json())
+      .then(res => {
+        console.log("Got response:", res);
+        return res.json();
+      })
       .then(AIs => {
+        console.log("Parsed JSON:", AIs);
         setAIs(AIs);
-        console.log("None")
-        console.log(AIs)
-        console.log("None")
-        setSelectedAI(AIs[0])
+        setSelectedAI(AIs[0]);
       })
       .catch(err => {
-        console.error('Error fetching models:', err);
+        console.error("Error fetching models:", err);
       });
   }, []);
 
