@@ -34,7 +34,10 @@ class simpleEval:
         self.topicUnattempted = 0
         self.topicData = []
 
-        self.connection = sqlite3.connect('mydata.db')
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(BASE_DIR, "mydata.db")
+        self.connection = sqlite3.connect(db_path)
+
         self.cursor = self.connection.cursor()
 
         self.Dataset = Dataset
@@ -115,10 +118,6 @@ class simpleEval:
         self.correct += self.topicCorrect
         self.incorrect += self.topicIncorrect
         self.unattempted += self.topicUnattempted
-        
-        print(self.correct)
-        print(self.incorrect)
-        print(self.unattempted)
 
     #https://docs.python.org/3/library/sqlite3.html#how-to-use-placeholders-to-bind-values-in-sql-queries
 
