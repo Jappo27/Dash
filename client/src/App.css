@@ -6,6 +6,37 @@
     outline:none;
     box-shadow: none;
 }
+@media (max-width: 768px) {
+  .dropdown, .calendar, .budget, .p-inputtext, .p-calendar {
+    width: 100% !important;
+    float: none;   /* remove float for stacking */
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .UI, .lowerrow, .MidGraph, .Bottomrow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .graph, .largegraph {
+    width: 95% !important;
+    margin: 1rem 0;
+  }
+
+  .infocard {
+    width: 80%;   /* shrink cards */
+    height: auto; /* allow flexible height */
+  }
+
+  .infocard-front, .infocard-back {
+    font-size: 1.25rem; /* reduce text size for mobile */
+    line-height: 1.5rem;
+  }
+}
+
+
  
  h1 {
   font-family: Montserrat, sans-serif;
