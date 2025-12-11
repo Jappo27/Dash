@@ -9,6 +9,7 @@ class Harness():
     #https://docs.ollama.com/api#generate-a-completion
     def __init__(self, model):
         self.model = self.updateModel(model) # (required) the model name
+        self.modelName = model
         self.role = 'user' # the role of the message, either system, user, assistant, or tool
         self.prompt = None #the prompt to generate a response for
         self.suffix = None # the text after the model response
@@ -245,7 +246,3 @@ class Harness():
         #Show information about a model including details, modelfile, template, parameters, license, system prompt.
         ollama.show(self.model)
     
-
-m = Harness('gemma3:1b')
-m.updateContent("What day is it?")
-m.generateResponse()

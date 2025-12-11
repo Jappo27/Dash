@@ -34,7 +34,7 @@ class simpleEval:
         self.topicUnattempted = 0
         self.topicData = []
 
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "datagen")
         db_path = os.path.join(BASE_DIR, "mydata.db")
         self.connection = sqlite3.connect(db_path)
 

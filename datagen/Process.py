@@ -21,15 +21,16 @@ import json
 class Process():
 
     def __init__(self, Model):
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        BASE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "server")
         db_path = os.path.join(BASE_DIR, "mydata.db")
         self.connection = sqlite3.connect(db_path)
 
         self.cursor = self.connection.cursor()
         self.createProcessTable()
         
-        
-        with open("model_prices.json", "r") as f:
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        json_path = os.path.join(BASE_DIR, "model_prices.json")
+        with open(json_path, "r") as f:
             self.modelData = json.load(f)
 
         #Metrics
@@ -53,25 +54,27 @@ class Process():
         modelCharacteristics = []
 
         # Split self.Model by '-' or ':'
-        for i, char in enumerate(self.Model):
+        for i, char in enumerate(self.Model.modelName):
             if char in ('-', ':'):
-                modelCharacteristics.append(self.Model[prev:i])
+                modelCharacteristics.append(self.Model.modelName[prev:i])
                 prev = i + 1
 
         # Add the last chunk
-        modelCharacteristics.append(self.Model[prev:])
+        modelCharacteristics.append(self.Model.modelName[prev:])
 
         # Match against modelData keys
+        inputTokenCost = None
+        outputTokenCost = None
         for model in self.modelData.keys():
             if all(char in model for char in modelCharacteristics):
-                self.inputTokenCost = self.modelData[model].input_cost_per_token
-                self.outputTokenCost = self.modelData[model].output_cost_per_token
+                inputTokenCost = self.modelData[model].input_cost_per_token
+                outputTokenCost = self.modelData[model].output_cost_per_token
                 break
-
-                
-        if self.inputTokenCost == None or self.outputTokenCost == None:
+        
+        if inputTokenCost == None or outputTokenCost == None:
             self.cost = 'NULL'
-        self.cost = (self.Model.getReseponse().prompt_eval_count * self.inputTokenCost)+ (self.Model.getReseponse().eval_count * self.outputTokenCost)
+        else:
+            self.cost = (self.Model.getReseponse().prompt_eval_count * inputTokenCost)+ (self.Model.getReseponse().eval_count * outputTokenCost)
     
     def calcHardwareCost(self):
         modelCpu , modelMemory, modelDisk = [], [], []
@@ -90,9 +93,38 @@ class Process():
         self.cpuAvgPercent = sum(cpu)/len(cpu)
         self.memoryAvgTotal = sum(memory)/len(memory)
         self.diskAvgPercent = sum(disk)/len(disk) 
-        
-        self.wattageUsed = 70 * (self.cpuAvgPercent / 100)
+
+        self.getTDP()
+        self.wattageUsed = self.watts * (self.cpuAvgPercent / 100)
         self.Cost = (self.wattageUsed / 1000) * ((self.Latency)/ 3600) * 0.2635
+
+    def getTDP(self, download = "baraazaid/cpu-and-gpu-stats"):
+
+        #Checks if file is present, downloads
+        if os.path.isfile("tpu_cpus.csv") is False:
+            try:
+                #This data set is 3 years out of date
+                path = kagglehub.dataset_download(download)
+                print("Downloading File")            
+            except:
+                print("Download Failed")
+        #Opens file and loads data into a csvdict
+        csvfile = open(path, newline='')
+        dataset = csv.DictReader(csvfile)
+        #gets cpu brand name
+        cpu = cpuinfo.get_cpu_info()['brand_raw']
+
+        #compares device cpu to dataset getting wattage
+        for row in dataset:
+            if row["Name"] == cpu:
+                self.watts = int(row["TDP"][:-1])
+                csvfile.close()
+                return self.watts
+                    
+        #laptops typically use 30-70w
+        csvfile.close()
+        self.watts = 70
+        return self.watts
 
     def sampleModel(self, cpu=[], memory=[]):
         #This function samples the system during a model running
@@ -148,7 +180,8 @@ class Process():
 
     def processALL(self):
         self.calcLatency()
-        self.calcCost()
+        self.calcCloudCost()
+        self.calcHardwareCost()
 
         self.insertProcessTable()
 
