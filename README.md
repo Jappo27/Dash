@@ -98,22 +98,11 @@ Requirements:
     ollama
     python
 
-When initiating the project on new enviromentsyou must change the pathing for the database:
-C:/Users/OliJa/Desktop/AI-Dashboard/AI-DashBoard/mydata.db -> Your path
-
 RUN COMMANDS (In a virtual enviroment):
-    
+
+    cd server
     pip install -r requirements.txt
-
-    Terminal 1:
-        cd website
-        cd my-react-app
-        npm run dev
-
-    Terminal 2:
-        cd flask-server
-        python server.py
-
+    python app.py
 
 
  
